@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Time2Go — Know before you go</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-layout">
+
+    <aside class="sidebar">
+      <a class="logo-wrap" href="index.html">
+        <img src="logoF.png" alt="Time2Go" />
+        <span class="logo-text">Time2Go</span>
+      </a>
+      <div class="logo-tagline">Know before you go</div>
+      <nav id="mainNav"></nav>
+      <div class="sidebar-footer">Riyadh 🇸🇦</div>
+    </aside>
+
+    <main class="main-content">
+      <div class="page-header">
+        <h1>Find a place</h1>
+        <p>Search malls, cafes, and public spots in Riyadh — we'll tell you how busy they are right now.</p>
+      </div>
+
+      <div class="card">
+        <div class="search-bar">
+          <div class="search-wrap">
+            <span class="search-icon">🔍</span>
+            <input class="form-input" type="text" id="searchInput" placeholder="Try 'River Mall' or 'cafe'…" autocomplete="off" />
+          </div>
+          <button class="btn btn-primary" onclick="renderResults(document.getElementById('searchInput').value)">Search</button>
+        </div>
+        <div style="margin-top:14px; display:flex; gap:8px; flex-wrap:wrap;">
+          <button class="btn btn-ghost btn-sm filter-chip active" data-cat="all">All</button>
+          <button class="btn btn-ghost btn-sm filter-chip" data-cat="Mall">Malls</button>
+          <button class="btn btn-ghost btn-sm filter-chip" data-cat="Cafe">Cafes</button>
+          <button class="btn btn-ghost btn-sm filter-chip" data-cat="Supermarket">Supermarkets</button>
+        </div>
+      </div>
+
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+        <span class="section-title">Results</span>
+        <span id="resultsCount" style="font-size:13px; color:var(--gray-400);"></span>
+      </div>
+
+      <div class="results-grid" id="resultsContainer"></div>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

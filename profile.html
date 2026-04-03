@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Profile — Time2Go</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-layout">
+
+    <aside class="sidebar">
+      <a class="logo-wrap" href="index.html">
+        <img src="logoF.png" alt="Time2Go" />
+        <span class="logo-text">Time2Go</span>
+      </a>
+      <div class="logo-tagline">Know before you go</div>
+      <nav id="mainNav"></nav>
+      <div class="sidebar-footer">Riyadh 🇸🇦</div>
+    </aside>
+
+    <main class="main-content">
+      <!-- Hero -->
+      <div class="profile-hero">
+        <div class="profile-hero-avatar" id="profileInitial">?</div>
+        <div>
+          <div class="profile-hero-name" id="profileName">–</div>
+          <div class="profile-hero-email" id="profileEmail">–</div>
+        </div>
+      </div>
+
+      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(300px,1fr)); gap:20px;">
+
+        <!-- Notifications -->
+        <div class="card">
+          <div class="section-title">Notifications</div>
+          <div class="section-sub">Get alerts when your saved places get crowded.</div>
+
+          <div class="toggle-row">
+            <div class="toggle-info">
+              <strong>Congestion alerts</strong>
+              <span id="notifsStatus">–</span>
+            </div>
+            <div class="toggle-switch" id="notifsToggle"></div>
+          </div>
+
+          <div style="margin-top:20px;">
+            <div class="section-title" style="font-size:16px; margin-bottom:12px;">Recent</div>
+            <div id="notifsList"></div>
+          </div>
+        </div>
+
+        <!-- Account -->
+        <div class="card">
+          <div class="section-title">Account</div>
+          <div class="section-sub">Manage your session.</div>
+          <button id="logoutBtn" class="btn btn-ghost" style="margin-top:8px;">Sign out</button>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Location Details — Time2Go</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-layout">
+
+    <aside class="sidebar">
+      <a class="logo-wrap" href="index.html">
+        <img src="logoF.png" alt="Time2Go" />
+        <span class="logo-text">Time2Go</span>
+      </a>
+      <div class="logo-tagline">Know before you go</div>
+      <nav id="mainNav"></nav>
+      <div class="sidebar-footer">Riyadh 🇸🇦</div>
+    </aside>
+
+    <main class="main-content">
+      <a href="index.html" class="btn btn-ghost btn-sm" style="margin-bottom:20px;">← Back to search</a>
+
+      <div class="card" style="margin-bottom:20px;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:14px;">
+          <div>
+            <h1 class="section-title" id="detailName" style="font-size:24px;">–</h1>
+            <p style="font-size:14px; color:var(--blue-main); font-weight:500; margin-bottom:4px;" id="detailBranch"></p>
+            <p style="font-size:13.5px; color:var(--gray-400);" id="detailAddress"></p>
+          </div>
+          <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <button id="favBtn" class="btn btn-outline">🤍 Save</button>
+            <button id="mapsBtn" class="btn btn-primary">🗺 Open in Maps</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Current congestion -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-label">Right now</div>
+          <div class="stat-value" id="statCurrent">–</div>
+          <div class="stat-note">Current congestion</div>
+        </div>
+
+        <!-- Predicted: user picks date/time -->
+        <div class="stat-card" style="grid-column: span 2;">
+          <div class="stat-label">Check a specific time</div>
+          <p style="font-size:13.5px; color:var(--gray-400); margin-bottom:14px;">Pick a date and time to see how busy it's likely to be.</p>
+          <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+            <input class="form-input" type="datetime-local" id="dtInput" style="max-width:280px;" />
+            <button class="btn btn-primary" id="dtBtn">Check</button>
+          </div>
+          <div class="datetime-result" id="dtResult"></div>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div class="card">
+          <div class="section-title">Alternative spots</div>
+          <div class="section-sub">Similar places nearby that tend to be less busy</div>
+          <div id="alternativesBox"></div>
+        </div>
+        <div class="card">
+          <div class="section-title">Compare branches</div>
+          <div class="section-sub">All branches for this place, side by side</div>
+          <div id="compareBox"></div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
