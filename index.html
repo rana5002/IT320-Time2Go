@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+
   <div class="app-layout">
 
     <aside class="sidebar">
@@ -20,20 +21,32 @@
     </aside>
 
     <main class="main-content">
+
       <div class="page-header">
         <h1>Find a place</h1>
         <p>Search malls, cafes, and public spots in Riyadh — we'll tell you how busy they are right now.</p>
       </div>
 
+      <!-- Search box -->
       <div class="card">
         <div class="search-bar">
           <div class="search-wrap">
             <span class="search-icon">🔍</span>
-            <input class="form-input" type="text" id="searchInput" placeholder="Try 'River Mall' or 'cafe'…" autocomplete="off" />
+            <input
+              class="form-input"
+              type="text"
+              id="searchInput"
+              placeholder="Try 'River Mall' or 'cafe'…"
+              autocomplete="off"
+            />
           </div>
-          <button class="btn btn-primary" onclick="renderResults(document.getElementById('searchInput').value)">Search</button>
+          <button class="btn btn-primary" onclick="renderResults(document.getElementById('searchInput').value, document.querySelector('.filter-chip.active').dataset.cat)">
+            Search
+          </button>
         </div>
-        <div style="margin-top:14px; display:flex; gap:8px; flex-wrap:wrap;">
+
+        <!-- Category filters -->
+        <div style="margin-top: 14px; display: flex; gap: 8px; flex-wrap: wrap;">
           <button class="btn btn-ghost btn-sm filter-chip active" data-cat="all">All</button>
           <button class="btn btn-ghost btn-sm filter-chip" data-cat="Mall">Malls</button>
           <button class="btn btn-ghost btn-sm filter-chip" data-cat="Cafe">Cafes</button>
@@ -41,12 +54,14 @@
         </div>
       </div>
 
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+      <!-- Results — filled by renderResults() in JS -->
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
         <span class="section-title">Results</span>
-        <span id="resultsCount" style="font-size:13px; color:var(--gray-400);"></span>
+        <span id="resultsCount" style="font-size: 13px; color: var(--gray-400);"></span>
       </div>
 
       <div class="results-grid" id="resultsContainer"></div>
+
     </main>
   </div>
 

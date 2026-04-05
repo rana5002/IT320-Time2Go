@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+
   <div class="app-layout">
 
     <aside class="sidebar">
@@ -20,42 +21,50 @@
     </aside>
 
     <main class="main-content">
-      <a href="index.html" class="btn btn-ghost btn-sm" style="margin-bottom:20px;">← Back to search</a>
 
-      <div class="card" style="margin-bottom:20px;">
-        <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:14px;">
+      <a href="index.html" class="btn btn-ghost btn-sm" style="margin-bottom: 20px;">← Back to search</a>
+
+      <!-- Header — filled by renderDetails() -->
+      <div class="card" style="margin-bottom: 20px;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 14px;">
           <div>
-            <h1 class="section-title" id="detailName" style="font-size:24px;">–</h1>
-            <p style="font-size:14px; color:var(--blue-main); font-weight:500; margin-bottom:4px;" id="detailBranch"></p>
-            <p style="font-size:13.5px; color:var(--gray-400);" id="detailAddress"></p>
+            <h1 class="section-title" id="detailName" style="font-size: 24px;">–</h1>
+            <p id="detailBranch" style="font-size: 14px; color: var(--blue-main); font-weight: 500; margin-bottom: 4px;"></p>
+            <p id="detailAddress" style="font-size: 13.5px; color: var(--gray-400);"></p>
           </div>
-          <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <div style="display: flex; gap: 10px; flex-wrap: wrap;">
             <button id="favBtn" class="btn btn-outline">🤍 Save</button>
             <button id="mapsBtn" class="btn btn-primary">🗺 Open in Maps</button>
           </div>
         </div>
       </div>
 
-      <!-- Current congestion -->
+      <!-- Congestion info — statCurrent filled by renderDetails() -->
       <div class="stats-grid">
+
         <div class="stat-card">
           <div class="stat-label">Right now</div>
           <div class="stat-value" id="statCurrent">–</div>
           <div class="stat-note">Current congestion</div>
         </div>
 
-        <!-- Predicted: user picks date/time -->
+        <!-- Date/time picker — handled by initDatetimePicker() -->
         <div class="stat-card" style="grid-column: span 2;">
           <div class="stat-label">Check a specific time</div>
-          <p style="font-size:13.5px; color:var(--gray-400); margin-bottom:14px;">Pick a date and time to see how busy it's likely to be.</p>
-          <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
-            <input class="form-input" type="datetime-local" id="dtInput" style="max-width:280px;" />
+          <p style="font-size: 13.5px; color: var(--gray-400); margin-bottom: 14px;">
+            Pick a date and time to see how busy it's likely to be.
+          </p>
+          <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
+            <input class="form-input" type="datetime-local" id="dtInput" style="max-width: 280px;" />
             <button class="btn btn-primary" id="dtBtn">Check</button>
           </div>
+          <!-- dtResult is filled by JS after the user clicks Check -->
           <div class="datetime-result" id="dtResult"></div>
         </div>
+
       </div>
 
+      <!-- alternativesBox and compareBox filled by renderDetails() -->
       <div class="two-col">
         <div class="card">
           <div class="section-title">Alternative spots</div>
@@ -68,6 +77,7 @@
           <div id="compareBox"></div>
         </div>
       </div>
+
     </main>
   </div>
 

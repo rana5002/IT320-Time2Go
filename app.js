@@ -1,128 +1,144 @@
-'use strict';
+
+// ─── Data ────────────────────────────────────
 
 const LOCATIONS = [
   {
-    id: 1,
+    locationId: 1,
     name: 'River Mall',
-    branch: 'North Branch',
     category: 'Mall',
-    address: 'Al Yasmin District, Riyadh',
-    current: 'Medium',
-    schedule: {
-      weekday_morning: 'Low',
-      weekday_afternoon: 'High',
-      weekday_evening: 'Medium',
-      weekend_morning: 'Medium',
-      weekend_afternoon: 'High',
-      weekend_evening: 'High',
-    },
-    alternatives: ['Palm Mall', 'Sky Plaza'],
-    lat: 24.8103, lng: 46.6753,
+    branches: [
+      {
+        branchId: 1,
+        name: 'North Branch',
+        address: 'Al Yasmin District, Riyadh',
+        coordinates: '24.8103,46.6753',
+        current: 'Medium',
+        schedule: {
+          weekday_morning:   'Low',
+          weekday_afternoon: 'High',
+          weekday_evening:   'Medium',
+          weekend_morning:   'Medium',
+          weekend_afternoon: 'High',
+          weekend_evening:   'High',
+        },
+        alternatives: ['Palm Mall', 'Sky Plaza'],
+      },
+      {
+        branchId: 2,
+        name: 'East Branch',
+        address: 'Al Rawdah District, Riyadh',
+        coordinates: '24.7342,46.7891',
+        current: 'Low',
+        schedule: {
+          weekday_morning:   'Low',
+          weekday_afternoon: 'Medium',
+          weekday_evening:   'Medium',
+          weekend_morning:   'Low',
+          weekend_afternoon: 'High',
+          weekend_evening:   'High',
+        },
+        alternatives: ['Palm Mall', 'City Walk'],
+      },
+    ],
   },
   {
-    id: 2,
-    name: 'River Mall',
-    branch: 'East Branch',
-    category: 'Mall',
-    address: 'Al Rawdah District, Riyadh',
-    current: 'Low',
-    schedule: {
-      weekday_morning: 'Low',
-      weekday_afternoon: 'Medium',
-      weekday_evening: 'Medium',
-      weekend_morning: 'Low',
-      weekend_afternoon: 'High',
-      weekend_evening: 'High',
-    },
-    alternatives: ['Palm Mall', 'City Walk'],
-    lat: 24.7342, lng: 46.7891,
-  },
-  {
-    id: 3,
+    locationId: 2,
     name: 'Bean House',
-    branch: 'King Fahd Road',
     category: 'Cafe',
-    address: 'King Fahd Road, Riyadh',
-    current: 'High',
-    schedule: {
-      weekday_morning: 'Medium',
-      weekday_afternoon: 'High',
-      weekday_evening: 'High',
-      weekend_morning: 'Low',
-      weekend_afternoon: 'High',
-      weekend_evening: 'High',
-    },
-    alternatives: ['Roast Lab', 'Daily Cup'],
-    lat: 24.7136, lng: 46.6753,
+    branches: [
+      {
+        branchId: 1,
+        name: 'King Fahd Road',
+        address: 'King Fahd Road, Riyadh',
+        coordinates: '24.7136,46.6753',
+        current: 'High',
+        schedule: {
+          weekday_morning:   'Medium',
+          weekday_afternoon: 'High',
+          weekday_evening:   'High',
+          weekend_morning:   'Low',
+          weekend_afternoon: 'High',
+          weekend_evening:   'High',
+        },
+        alternatives: ['Roast Lab', 'Daily Cup'],
+      },
+      {
+        branchId: 2,
+        name: 'Olaya Branch',
+        address: 'Al Olaya, Riyadh',
+        coordinates: '24.7115,46.6749',
+        current: 'Low',
+        schedule: {
+          weekday_morning:   'Low',
+          weekday_afternoon: 'Low',
+          weekday_evening:   'Medium',
+          weekend_morning:   'Low',
+          weekend_afternoon: 'Medium',
+          weekend_evening:   'High',
+        },
+        alternatives: ['Roast Lab', 'Moon Cafe'],
+      },
+    ],
   },
   {
-    id: 4,
-    name: 'Bean House',
-    branch: 'Olaya Branch',
-    category: 'Cafe',
-    address: 'Al Olaya, Riyadh',
-    current: 'Low',
-    schedule: {
-      weekday_morning: 'Low',
-      weekday_afternoon: 'Low',
-      weekday_evening: 'Medium',
-      weekend_morning: 'Low',
-      weekend_afternoon: 'Medium',
-      weekend_evening: 'High',
-    },
-    alternatives: ['Roast Lab', 'Moon Cafe'],
-    lat: 24.7115, lng: 46.6749,
-  },
-  {
-    id: 5,
+    locationId: 3,
     name: 'Grocery Hub',
-    branch: 'Malaz Branch',
     category: 'Supermarket',
-    address: 'Al Malaz, Riyadh',
-    current: 'Low',
-    schedule: {
-      weekday_morning: 'Low',
-      weekday_afternoon: 'Medium',
-      weekday_evening: 'Medium',
-      weekend_morning: 'Medium',
-      weekend_afternoon: 'High',
-      weekend_evening: 'Medium',
-    },
-    alternatives: ['Fresh Market', 'QuickShop'],
-    lat: 24.6877, lng: 46.7219,
+    branches: [
+      {
+        branchId: 1,
+        name: 'Malaz Branch',
+        address: 'Al Malaz, Riyadh',
+        coordinates: '24.6877,46.7219',
+        current: 'Low',
+        schedule: {
+          weekday_morning:   'Low',
+          weekday_afternoon: 'Medium',
+          weekday_evening:   'Medium',
+          weekend_morning:   'Medium',
+          weekend_afternoon: 'High',
+          weekend_evening:   'Medium',
+        },
+        alternatives: ['Fresh Market', 'QuickShop'],
+      },
+    ],
   },
 ];
 
 const MOCK_NOTIFICATIONS = [
-  { id: 1, read: false, title: 'River Mall is getting busy',            time: '5 minutes ago' },
-  { id: 2, read: false, title: 'Best time to visit Bean House: now!',  time: '22 minutes ago' },
-  { id: 3, read: true,  title: 'Your favorite spot is quieter today',  time: '2 hours ago' },
+  { id: 1, read: false, title: 'River Mall is getting busy',             time: '5 minutes ago' },
+  { id: 2, read: false, title: 'Best time to visit Bean House: now!',   time: '22 minutes ago' },
+  { id: 3, read: true,  title: 'Your favorite spot is quieter today',   time: '2 hours ago' },
   { id: 4, read: true,  title: 'Grocery Hub congestion dropped to Low', time: 'Yesterday' },
 ];
 
-// ─── Session state ────────────────────────────────────
-// Both currentUser and favoriteIds live in sessionStorage
-// so they survive page navigation but reset when the tab closes
+
+// ─── Session ─────────────────────────────────
+// Stays alive while the tab is open, clears when tab closes
 
 let currentUser = sessionStorage.getItem('t2g_user')
                   ? JSON.parse(sessionStorage.getItem('t2g_user'))
                   : null;
 
-let favoriteIds = sessionStorage.getItem('t2g_favs')
-                  ? JSON.parse(sessionStorage.getItem('t2g_favs'))
-                  : [];
+// favoritesList stores full branch objects as per the class diagram
+let favoritesList = sessionStorage.getItem('t2g_favs')
+                    ? JSON.parse(sessionStorage.getItem('t2g_favs'))
+                    : [];
 
 let notificationsEnabled = true;
 
 function saveFavs() {
-  sessionStorage.setItem('t2g_favs', JSON.stringify(favoriteIds));
+  sessionStorage.setItem('t2g_favs', JSON.stringify(favoritesList));
 }
 
-// ─── Utilities ───────────────────────────────────────
+
+// ─── Helpers ─────────────────────────────────
 
 function badgeClass(level) {
-  const map = { low: 'badge-low', medium: 'badge-medium', high: 'badge-high' };
-  return map[level.toLowerCase()] || 'badge-low';
+  if (level.toLowerCase() === 'low')    return 'badge-low';
+  if (level.toLowerCase() === 'medium') return 'badge-medium';
+  if (level.toLowerCase() === 'high')   return 'badge-high';
+  return 'badge-low';
 }
 
 function badge(level) {
@@ -146,9 +162,9 @@ function showAlert(elementId, message, type = 'info') {
   setTimeout(() => { el.innerHTML = ''; }, 3500);
 }
 
+// Friday and Saturday are the weekend in Saudi Arabia
 function isWeekend(date) {
-  const day = date.getDay();
-  return day === 5 || day === 6;
+  return date.getDay() === 5 || date.getDay() === 6;
 }
 
 function getTimeSlot(date) {
@@ -158,22 +174,22 @@ function getTimeSlot(date) {
   return 'evening';
 }
 
-function getPredictedCongestion(location, date) {
-  const dayType  = isWeekend(date) ? 'weekend' : 'weekday';
-  const timeSlot = getTimeSlot(date);
-  return location.schedule[`${dayType}_${timeSlot}`] || 'Medium';
+function getPredictedCongestion(branch, date) {
+  const dayType = isWeekend(date) ? 'weekend' : 'weekday';
+  const slot    = getTimeSlot(date);
+  return branch.schedule[`${dayType}_${slot}`] || 'Medium';
 }
 
-function getBestTimeLabel(location, date) {
+function getBestTimeLabel(branch, date) {
   const dayType = isWeekend(date) ? 'weekend' : 'weekday';
   const slots = [
     { key: `${dayType}_morning`,   label: '6:00 AM – 12:00 PM' },
     { key: `${dayType}_afternoon`, label: '12:00 PM – 6:00 PM' },
     { key: `${dayType}_evening`,   label: '6:00 PM – 11:00 PM' },
   ];
-  const low = slots.find(s => location.schedule[s.key] === 'Low');
+  const low = slots.find(s => branch.schedule[s.key] === 'Low');
   if (low) return low.label;
-  const med = slots.find(s => location.schedule[s.key] === 'Medium');
+  const med = slots.find(s => branch.schedule[s.key] === 'Medium');
   if (med) return med.label;
   return 'No low-congestion window today';
 }
@@ -182,7 +198,46 @@ function avatarLetter(name) {
   return name ? name.charAt(0).toUpperCase() : 'G';
 }
 
-// ─── Sidebar ─────────────────────────────────────────
+function goToDetails(locationId, branchId) {
+  window.location.href = `details.html?locationId=${locationId}&branchId=${branchId}`;
+}
+
+// Add or remove a branch from favoritesList
+function toggleFavorite(locationId, branchId, btn) {
+  const already = favoritesList.find(
+    f => f.locationId === locationId && f.branchId === branchId
+  );
+
+  if (already) {
+    favoritesList = favoritesList.filter(
+      f => !(f.locationId === locationId && f.branchId === branchId)
+    );
+  } else {
+    // Find the branch and save it with its parent location info
+    const location = LOCATIONS.find(l => l.locationId === locationId);
+    const branch   = location.branches.find(b => b.branchId === branchId);
+    favoritesList.push({
+      locationId:   location.locationId,
+      locationName: location.name,
+      locationCategory: location.category,
+      branchId:     branch.branchId,
+      branchName:   branch.name,
+      address:      branch.address,
+      coordinates:  branch.coordinates,
+    });
+  }
+
+  saveFavs();
+  if (btn) {
+    const isSaved = favoritesList.find(
+      f => f.locationId === locationId && f.branchId === branchId
+    );
+    btn.textContent = isSaved ? '❤️ Saved' : '🤍 Save';
+  }
+}
+
+
+// ─── Sidebar ─────────────────────────────────
 
 function buildSidebar() {
   const nav = document.querySelector('nav#mainNav');
@@ -190,42 +245,52 @@ function buildSidebar() {
 
   const currentFile = window.location.pathname.split('/').pop() || 'index.html';
 
-  function navItem(href, icon, label, page) {
-    const active = (currentFile === page || (currentFile === '' && page === 'index.html')) ? 'active' : '';
-    return `<a class="nav-link ${active}" href="${href}">
-              <span class="nav-icon">${icon}</span>${label}
-            </a>`;
+  function isActive(page) {
+    return currentFile === page || (currentFile === '' && page === 'index.html') ? 'active' : '';
   }
 
   if (currentUser) {
     nav.innerHTML = `
-      ${navItem('index.html', '🏠', 'Home', 'index.html')}
-      <a class="sidebar-profile ${currentFile === 'profile.html' ? 'active' : ''}" href="profile.html">
+      <a class="nav-link ${isActive('index.html')}" href="index.html">
+        <span class="nav-icon">🏠</span> Home
+      </a>
+      <a class="sidebar-profile ${isActive('profile.html')}" href="profile.html">
         <div class="profile-avatar">${avatarLetter(currentUser.name)}</div>
         <div class="profile-info">
           <span class="profile-name">${currentUser.name}</span>
           <span class="profile-role">View profile</span>
         </div>
       </a>
-      ${navItem('favorites.html', '❤️', 'Favorites', 'favorites.html')}
-    `;
+      <a class="nav-link ${isActive('favorites.html')}" href="favorites.html">
+        <span class="nav-icon">❤️</span> Favorites
+      </a>`;
   } else {
     nav.innerHTML = `
-      ${navItem('index.html',  '🏠', 'Home',    'index.html')}
-      ${navItem('signin.html', '🔑', 'Sign in', 'signin.html')}
-    `;
+      <a class="nav-link ${isActive('index.html')}" href="index.html">
+        <span class="nav-icon">🏠</span> Home
+      </a>
+      <a class="nav-link ${isActive('signin.html')}" href="signin.html">
+        <span class="nav-icon">🔑</span> Sign in
+      </a>`;
   }
 }
 
-// ─── Home Page ───────────────────────────────────────
+
+// ─── Home Page ───────────────────────────────
 
 function initHomePage() {
   buildSidebar();
+
   const input = document.getElementById('searchInput');
   if (!input) return;
+
   renderResults('');
+
   input.addEventListener('input', () => renderResults(input.value));
-  input.addEventListener('keydown', e => { if (e.key === 'Enter') renderResults(input.value); });
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Enter') renderResults(input.value);
+  });
+
   document.querySelectorAll('.filter-chip').forEach(chip => {
     chip.addEventListener('click', () => {
       document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
@@ -235,119 +300,150 @@ function initHomePage() {
   });
 }
 
+// One card per location — branch selected via dropdown inside the card
 function renderResults(query = '', cat = 'all') {
   const q = query.toLowerCase().trim();
+
   const filtered = LOCATIONS.filter(loc => {
-    const matchQ = !q || loc.name.toLowerCase().includes(q) || loc.branch.toLowerCase().includes(q) || loc.address.toLowerCase().includes(q);
+    const matchQ = !q || loc.name.toLowerCase().includes(q) || loc.category.toLowerCase().includes(q);
     const matchC = cat === 'all' || loc.category.toLowerCase() === cat.toLowerCase();
     return matchQ && matchC;
   });
 
   const countEl = document.getElementById('resultsCount');
-  if (countEl) countEl.textContent = `${filtered.length} place${filtered.length !== 1 ? 's' : ''} found`;
+  if (countEl) {
+    countEl.textContent = `${filtered.length} place${filtered.length !== 1 ? 's' : ''} found`;
+  }
 
   const container = document.getElementById('resultsContainer');
   if (!container) return;
 
   if (!filtered.length) {
-    container.innerHTML = `<div class="empty-state" style="grid-column:1/-1">
-      <div class="empty-icon">🔍</div>
-      <p>Nothing matched — try a different name or area.</p>
-    </div>`;
+    container.innerHTML = `
+      <div class="empty-state" style="grid-column:1/-1">
+        <div class="empty-icon">🔍</div>
+        <p>Nothing matched — try a different name or area.</p>
+      </div>`;
     return;
   }
 
-  container.innerHTML = filtered.map(item => {
-    const isFav = favoriteIds.includes(item.id);
+  container.innerHTML = filtered.map(loc => {
+    // Build the branch dropdown options
+    const options = loc.branches.map(b =>
+      `<option value="${b.branchId}">${b.name}</option>`
+    ).join('');
+
     return `
       <div class="card location-card">
         <div class="card-top">
           <div>
-            <h3>${item.name}</h3>
-            <div class="branch-label">${item.branch}</div>
+            <h3>${loc.name}</h3>
+            <div class="branch-label">${loc.category}</div>
           </div>
-          ${badge(item.current)}
         </div>
-        <div class="address">📍 ${item.address}</div>
-        <div style="margin-bottom:14px;"><span class="chip">${item.category}</span></div>
+
+        <div style="margin-bottom: 14px;">
+          <span class="chip">${loc.category}</span>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 14px;">
+          <label style="font-size:13px; color:var(--gray-400); margin-bottom:6px; display:block;">Select branch</label>
+          <select class="form-input" id="branch-select-${loc.locationId}">
+            ${options}
+          </select>
+        </div>
+
         <div class="card-actions">
-          <button class="btn btn-primary btn-sm" onclick="goToDetails(${item.id})">View details</button>
-          ${currentUser
-            ? `<button class="btn btn-ghost btn-sm" onclick="toggleFavorite(${item.id}, this)">${isFav ? '❤️ Saved' : '🤍 Save'}</button>`
-            : ''}
+          <button
+            class="btn btn-primary btn-sm"
+            onclick="goToDetails(${loc.locationId}, parseInt(document.getElementById('branch-select-${loc.locationId}').value))">
+            View details
+          </button>
         </div>
       </div>`;
   }).join('');
 }
 
-// ─── Details Page ─────────────────────────────────────
+
+// ─── Details Page ────────────────────────────
 
 function initDetailsPage() {
   buildSidebar();
-  const params = new URLSearchParams(window.location.search);
-  const id = parseInt(params.get('id'));
-  if (!id) { window.location.href = 'index.html'; return; }
-  const item = LOCATIONS.find(l => l.id === id);
-  if (!item) { window.location.href = 'index.html'; return; }
-  renderDetails(item);
-  initDatetimePicker(item);
+
+  // Read locationId and branchId from the URL
+  const params     = new URLSearchParams(window.location.search);
+  const locationId = parseInt(params.get('locationId'));
+  const branchId   = parseInt(params.get('branchId'));
+
+  if (!locationId || !branchId) { window.location.href = 'index.html'; return; }
+
+  const location = LOCATIONS.find(l => l.locationId === locationId);
+  if (!location) { window.location.href = 'index.html'; return; }
+
+  const branch = location.branches.find(b => b.branchId === branchId);
+  if (!branch) { window.location.href = 'index.html'; return; }
+
+  renderDetails(location, branch);
+  initDatetimePicker(branch);
 }
 
-function renderDetails(item) {
-  const isFav = favoriteIds.includes(item.id);
+function renderDetails(location, branch) {
+  const isSaved = favoritesList.find(
+    f => f.locationId === location.locationId && f.branchId === branch.branchId
+  );
 
-  setEl('detailName',    item.name);
-  setEl('detailBranch',  `${item.branch} · ${item.category}`);
-  setEl('detailAddress', `📍 ${item.address}`);
-  setHTML('statCurrent', badge(item.current));
+  setEl('detailName',    location.name);
+  setEl('detailBranch',  `${branch.name} · ${location.category}`);
+  setEl('detailAddress', `📍 ${branch.address}`);
+  setHTML('statCurrent', badge(branch.current));
 
+  // Save button — only for logged-in users
   const favBtn = document.getElementById('favBtn');
   if (favBtn) {
     if (currentUser) {
       favBtn.style.display = 'inline-flex';
-      favBtn.textContent = isFav ? '❤️ Saved' : '🤍 Save';
-      favBtn.onclick = () => {
-        toggleFavorite(item.id, favBtn);
-      };
+      favBtn.textContent   = isSaved ? '❤️ Saved' : '🤍 Save';
+      favBtn.onclick = () => toggleFavorite(location.locationId, branch.branchId, favBtn);
     } else {
       favBtn.style.display = 'none';
     }
   }
 
-  const mapsBtn = document.getElementById('mapsBtn');
-  if (mapsBtn) {
-    mapsBtn.onclick = () => window.open(`https://www.google.com/maps?q=${item.lat},${item.lng}`, '_blank');
-  }
+  // Opens Google Maps using the branch coordinates
+  document.getElementById('mapsBtn').onclick = () => {
+    window.open(`https://www.google.com/maps?q=${branch.coordinates}`, '_blank');
+  };
 
+  // Alternative suggestions
   const altBox = document.getElementById('alternativesBox');
   if (altBox) {
-    altBox.innerHTML = item.alternatives.map(alt => `
+    altBox.innerHTML = branch.alternatives.map(alt => `
       <div class="item-row">
         <div><strong>${alt}</strong><div class="sub">Nearby — tends to be less busy</div></div>
         <span class="badge badge-low">Less busy</span>
       </div>`).join('');
   }
 
-  const sameBranches = LOCATIONS.filter(l => l.name === item.name);
+  // Compare all branches of the same location
   const compareBox = document.getElementById('compareBox');
   if (compareBox) {
-    compareBox.innerHTML = sameBranches.map(b => `
+    compareBox.innerHTML = location.branches.map(b => `
       <div class="item-row">
-        <div><strong>${b.branch}</strong><div class="sub">${b.address}</div></div>
+        <div><strong>${b.name}</strong><div class="sub">${b.address}</div></div>
         <div class="item-actions">
-          ${badge(b.current)}
-          <button class="btn btn-primary btn-sm" onclick="goToDetails(${b.id})">Go</button>
+          <button class="btn btn-primary btn-sm" onclick="goToDetails(${location.locationId}, ${b.branchId})">Go</button>
         </div>
       </div>`).join('');
   }
 }
 
-function initDatetimePicker(item) {
+function initDatetimePicker(branch) {
   const dtInput  = document.getElementById('dtInput');
   const dtBtn    = document.getElementById('dtBtn');
   const dtResult = document.getElementById('dtResult');
   if (!dtInput || !dtBtn || !dtResult) return;
 
+  // Prevent picking a time in the past
   const now = new Date();
   const pad = n => String(n).padStart(2, '0');
   dtInput.min = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}T${pad(now.getHours())}:${pad(now.getMinutes())}`;
@@ -358,9 +454,10 @@ function initDatetimePicker(item) {
       dtResult.innerHTML = `<div class="datetime-answer">Pick a date and time first</div>`;
       return;
     }
+
     const chosen    = new Date(dtInput.value);
-    const predicted = getPredictedCongestion(item, chosen);
-    const bestTime  = getBestTimeLabel(item, chosen);
+    const predicted = getPredictedCongestion(branch, chosen);
+    const bestTime  = getBestTimeLabel(branch, chosen);
     const dayLabel  = isWeekend(chosen) ? 'weekend' : 'weekday';
     const timeLabel = getTimeSlot(chosen);
 
@@ -376,7 +473,8 @@ function initDatetimePicker(item) {
   });
 }
 
-// ─── Favorites Page ───────────────────────────────────
+
+// ─── Favorites Page ──────────────────────────
 
 function initFavoritesPage() {
   buildSidebar();
@@ -387,37 +485,39 @@ function initFavoritesPage() {
 function renderFavorites() {
   const box = document.getElementById('favoritesBox');
   if (!box) return;
-  const items = LOCATIONS.filter(l => favoriteIds.includes(l.id));
 
-  if (!items.length) {
-    box.innerHTML = `<div class="empty-state">
-      <div class="empty-icon">🔖</div>
-      <p>Nothing saved yet. Search for a place and tap "Save".</p>
-    </div>`;
+  if (!favoritesList.length) {
+    box.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon">🔖</div>
+        <p>Nothing saved yet. Search for a place and tap "Save".</p>
+      </div>`;
     return;
   }
 
-  box.innerHTML = items.map(item => `
+  box.innerHTML = favoritesList.map(fav => `
     <div class="item-row">
       <div>
-        <strong>${item.name} – ${item.branch}</strong>
-        <div class="sub">📍 ${item.address}</div>
+        <strong>${fav.locationName} – ${fav.branchName}</strong>
+        <div class="sub">📍 ${fav.address}</div>
       </div>
       <div class="item-actions">
-        ${badge(item.current)}
-        <button class="btn btn-primary btn-sm" onclick="goToDetails(${item.id})">View</button>
-        <button class="btn btn-ghost btn-sm" onclick="removeFavorite(${item.id})">Remove</button>
+        <button class="btn btn-primary btn-sm" onclick="goToDetails(${fav.locationId}, ${fav.branchId})">View</button>
+        <button class="btn btn-ghost btn-sm" onclick="removeFavorite(${fav.locationId}, ${fav.branchId})">Remove</button>
       </div>
     </div>`).join('');
 }
 
-function removeFavorite(id) {
-  favoriteIds = favoriteIds.filter(f => f !== id);
+function removeFavorite(locationId, branchId) {
+  favoritesList = favoritesList.filter(
+    f => !(f.locationId === locationId && f.branchId === branchId)
+  );
   saveFavs();
   renderFavorites();
 }
 
-// ─── Profile Page ─────────────────────────────────────
+
+// ─── Profile Page ────────────────────────────
 
 function initProfilePage() {
   buildSidebar();
@@ -429,18 +529,19 @@ function initProfilePage() {
 
   const toggle = document.getElementById('notifsToggle');
   const status = document.getElementById('notifsStatus');
+
   if (toggle) {
     toggle.classList.toggle('on', notificationsEnabled);
     toggle.addEventListener('click', () => {
       notificationsEnabled = !notificationsEnabled;
       toggle.classList.toggle('on', notificationsEnabled);
-      if (status) status.textContent = notificationsEnabled
+      status.textContent = notificationsEnabled
         ? "You'll get updates when your saved places get busy."
-        : "Notifications are off.";
+        : 'Notifications are off.';
     });
-    if (status) status.textContent = notificationsEnabled
+    status.textContent = notificationsEnabled
       ? "You'll get updates when your saved places get busy."
-      : "Notifications are off.";
+      : 'Notifications are off.';
   }
 
   const notifsList = document.getElementById('notifsList');
@@ -455,19 +556,17 @@ function initProfilePage() {
       </div>`).join('');
   }
 
-  const logoutBtn = document.getElementById('logoutBtn');
-  if (logoutBtn) {
-    logoutBtn.addEventListener('click', () => {
-      currentUser = null;
-      favoriteIds = [];
-      sessionStorage.removeItem('t2g_user');
-      sessionStorage.removeItem('t2g_favs');
-      window.location.href = 'index.html';
-    });
-  }
+  document.getElementById('logoutBtn').addEventListener('click', () => {
+    currentUser = null;
+    favoritesList = [];
+    sessionStorage.removeItem('t2g_user');
+    sessionStorage.removeItem('t2g_favs');
+    window.location.href = 'index.html';
+  });
 }
 
-// ─── Sign In Page ─────────────────────────────────────
+
+// ─── Sign In Page ────────────────────────────
 
 function initSignInPage() {
   const loginTab     = document.getElementById('tabLogin');
@@ -500,8 +599,8 @@ function initSignInPage() {
     const email    = document.getElementById('loginEmail').value.trim();
     const password = document.getElementById('loginPassword').value;
     if (!email || !password) { showAlert('loginMsg', 'Please fill in both fields.', 'error'); return; }
-    const name = email.split('@')[0];
-    currentUser = { name: name.charAt(0).toUpperCase() + name.slice(1), email };
+    const rawName = email.split('@')[0];
+    currentUser = { name: rawName.charAt(0).toUpperCase() + rawName.slice(1), email };
     sessionStorage.setItem('t2g_user', JSON.stringify(currentUser));
     window.location.href = 'index.html';
   });
@@ -520,23 +619,8 @@ function initSignInPage() {
   });
 }
 
-// ─── Shared Helpers ───────────────────────────────────
 
-function goToDetails(id) {
-  window.location.href = `details.html?id=${id}`;
-}
-
-function toggleFavorite(id, btn) {
-  if (favoriteIds.includes(id)) {
-    favoriteIds = favoriteIds.filter(f => f !== id);
-  } else {
-    favoriteIds.push(id);
-  }
-  saveFavs();
-  if (btn) btn.textContent = favoriteIds.includes(id) ? '❤️ Saved' : '🤍 Save';
-}
-
-// ─── Boot ─────────────────────────────────────────────
+// ─── Boot ────────────────────────────────────
 
 document.addEventListener('DOMContentLoaded', () => {
   const page = window.location.pathname.split('/').pop() || 'index.html';
