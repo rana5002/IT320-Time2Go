@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:8889
--- Generation Time: Apr 22, 2026 at 08:57 AM
+-- Generation Time: Apr 22, 2026 at 09:03 AM
 -- Server version: 8.0.44
 -- PHP Version: 8.3.30
 
@@ -159,6 +159,18 @@ CREATE TABLE `Notification` (
   `timestamp` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+--
+-- Dumping data for table `Notification`
+--
+
+INSERT INTO `Notification` (`notification_id`, `user_id`, `branch_id`, `message`, `status`, `timestamp`) VALUES
+(9, 1, 2, 'Al Nakheel Mall is getting busy — consider coming later', 'unread', '2026-04-22 11:48:03'),
+(10, 1, 4, 'Starbucks Kingdom Centre is crowded right now', 'unread', '2026-04-22 10:03:03'),
+(11, 1, 8, 'Dunkin Al Olaya is quiet — good time to visit', 'unread', '2026-04-22 07:03:03'),
+(12, 1, 14, 'Danube Hayat Mall is not busy right now', 'read', '2026-04-21 12:03:03'),
+(13, 1, 17, 'Carrefour Granada Mall expects a busy evening', 'read', '2026-04-20 12:03:03'),
+(14, 1, 20, 'Tamimi Al Olaya is quiet — perfect for a quick shop', 'read', '2026-04-18 12:03:03');
+
 -- --------------------------------------------------------
 
 --
@@ -259,7 +271,7 @@ ALTER TABLE `Location`
 -- AUTO_INCREMENT for table `Notification`
 --
 ALTER TABLE `Notification`
-  MODIFY `notification_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `notification_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `User`
