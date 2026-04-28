@@ -3,7 +3,7 @@ session_start();
 require_once 'db.php';
 
 if (!isset($_SESSION['user_id'])) {
-    header("Location: signin.php");
+    header("Location: signin.php?msg=auth_required");
     exit;
 }
 
@@ -84,10 +84,14 @@ function badgeText($level) {
 
     <main class="main-content">
 
-      <div class="page-header">
-        <h1>Your favorites</h1>
-        <p>Places you've saved. Tap a place to check how busy it is right now.</p>
-      </div>
+     <div class="page-header">
+  <h1>Your favorites</h1>
+  <p>Places you've saved. Tap a place to check how busy it is right now.</p>
+</div>
+
+<?php if (isset($_GET['msg']) && $_GET['msg'] === 'fav_failed'): ?>
+  <div class="alert alert-error">Couldn't update your favorites. Please try again.</div>
+<?php endif; ?>
 
       <div class="card">
         <?php if (count($favorites) === 0): ?>

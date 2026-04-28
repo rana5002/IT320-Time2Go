@@ -2,17 +2,12 @@
 session_start();
 require_once 'db.php';
 
-if (!isset($_SESSION['user_id'])) {
-    header("Location: signin.php");
-    exit;
-}
-
-$userId   = $_SESSION['user_id'];
-$userName = $_SESSION['name'];
+$userId   = $_SESSION['user_id'] ?? null;
+$userName = $_SESSION['name'] ?? '';
 $branchId = intval($_GET['branch_id'] ?? 0);
 
 if ($branchId <= 0) {
-    header("Location: index.php");
+    header("Location: index.php?msg=invalid_branch");
     exit;
 }
 
@@ -30,7 +25,7 @@ $branch = $stmt->get_result()->fetch_assoc();
 $stmt->close();
 
 if (!$branch) {
-    header("Location: index.php");
+    header("Location: index.php?msg=branch_not_found");
     exit;
 }
 
@@ -47,12 +42,15 @@ $stmt->execute();
 $congestion = $stmt->get_result()->fetch_assoc();
 $stmt->close();
 
-// Check if this branch is favorited
-$stmt = $conn->prepare("SELECT favorite_id FROM Favorite WHERE user_id = ? AND branch_id = ?");
-$stmt->bind_param("ii", $userId, $branchId);
-$stmt->execute();
-$isFav = $stmt->get_result()->fetch_assoc();
-$stmt->close();
+// Check if this branch is favorited (only if logged in)
+$isFav = null;
+if ($userId) {
+    $stmt = $conn->prepare("SELECT favorite_id FROM Favorite WHERE user_id = ? AND branch_id = ?");
+    $stmt->bind_param("ii", $userId, $branchId);
+    $stmt->execute();
+    $isFav = $stmt->get_result()->fetch_assoc();
+    $stmt->close();
+}
 
 // Get other branches of the same location (for comparison)
 $stmt = $conn->prepare("
@@ -99,32 +97,38 @@ $stmt->close();
 
 // Handle datetime check
 $dtResult = null;
+$dtError  = null;
+
 if (isset($_GET['dt']) && $_GET['dt'] !== '') {
     $dt = $_GET['dt'];
     $timestamp = strtotime($dt);
-    if ($timestamp !== false) {
-        $hour    = (int)date('G', $timestamp);
-        $dayOfWk = (int)date('w', $timestamp); // 0 = Sunday, 6 = Saturday
 
-        // Simple prediction logic based on hour and day
+    if ($timestamp === false) {
+        $dtError = 'Invalid date format. Please pick a valid date and time.';
+    } elseif ($timestamp < strtotime('today')) {
+        $dtError = "You can't check a date in the past. Pick today or later.";
+    } elseif ($timestamp > strtotime('+30 days')) {
+        $dtError = "Predictions are only available for the next 30 days.";
+    } else {
+        $hour    = (int)date('G', $timestamp);
+        $dayOfWk = (int)date('w', $timestamp);
+
         if ($dayOfWk === 5 || $dayOfWk === 6) {
-            // Weekend (Fri/Sat in Saudi)
             if ($hour >= 18 && $hour <= 23)      $predicted = 'high';
             elseif ($hour >= 14 && $hour <= 17)  $predicted = 'medium';
             else                                  $predicted = 'low';
         } else {
-            // Weekday
             if ($hour >= 19 && $hour <= 22)      $predicted = 'high';
             elseif ($hour >= 16 && $hour <= 18)  $predicted = 'medium';
             else                                  $predicted = 'low';
         }
+
         $dtResult = [
             'level' => $predicted,
             'time'  => date('l, M j · g:i A', $timestamp)
         ];
     }
 }
-
 // Helpers
 function badgeClass($level) {
     if ($level === 'low')    return 'badge-low';
@@ -158,21 +162,32 @@ function badgeText($level) {
       </a>
       <div class="logo-tagline">Know before you go</div>
 
-      <nav>
-        <a class="nav-link" href="index.php"><span class="nav-icon">🔍</span> Search</a>
-        <a class="nav-link" href="favorites.php"><span class="nav-icon">⭐</span> Favorites</a>
-        <a class="nav-link" href="profile.php"><span class="nav-icon">👤</span> Profile</a>
-      </nav>
+     <nav>
+  <a class="nav-link" href="index.php"><span class="nav-icon">🔍</span> Search</a>
+  <?php if ($userId): ?>
+    <a class="nav-link" href="favorites.php"><span class="nav-icon">⭐</span> Favorites</a>
+    <a class="nav-link" href="profile.php"><span class="nav-icon">👤</span> Profile</a>
+  <?php endif; ?>
+</nav>
 
       <div class="sidebar-footer">
-        Signed in as <strong><?= htmlspecialchars($userName) ?></strong><br>
-        Riyadh 🇸🇦
+        <?php if ($userId): ?>
+          Signed in as <strong><?= htmlspecialchars($userName) ?></strong><br>
+          Riyadh 🇸🇦
+        <?php else: ?>
+          <a href="signin.php" class="btn btn-primary btn-sm" style="width: 100%; justify-content: center; margin-bottom: 10px;">Log in</a>
+          Riyadh 🇸🇦
+        <?php endif; ?>
       </div>
     </aside>
 
     <main class="main-content">
 
-      <a href="index.php" class="btn btn-ghost btn-sm" style="margin-bottom: 20px;">← Back to search</a>
+<a href="index.php" class="btn btn-ghost btn-sm" style="margin-bottom: 20px;">← Back to search</a>
+
+<?php if (isset($_GET['msg']) && $_GET['msg'] === 'fav_failed'): ?>
+  <div class="alert alert-error">Couldn't update your favorites. Please try again.</div>
+<?php endif; ?>
 
       <!-- Header -->
       <div class="card" style="margin-bottom: 40px;">
@@ -185,16 +200,18 @@ function badgeText($level) {
             <p style="font-size: 13.5px; color: var(--gray-400);"><?= htmlspecialchars($branch['address']) ?></p>
           </div>
           <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-            <form method="POST" action="toggle_favorite.php" style="display:inline;">
-              <input type="hidden" name="branch_id" value="<?= $branchId ?>" />
-              <input type="hidden" name="redirect" value="details.php?branch_id=<?= $branchId ?>" />
-              <button type="submit" class="btn btn-outline">
-                <?= $isFav ? '💙 Saved' : '🤍 Save' ?>
-              </button>
-            </form>
-<a href="https://www.google.com/maps/search/?api=1&query=<?= urlencode($branch['location_name'] . ' ' . $branch['branch_name'] . ' Riyadh') ?>" target="_blank" class="btn btn-primary">🗺 Open in Maps</a>
-
-</div>
+            <?php if ($userId): ?>
+              <form method="POST" action="toggle_favorite.php" style="display:inline;">
+                <input type="hidden" name="branch_id" value="<?= $branchId ?>" />
+                <input type="hidden" name="redirect" value="details.php?branch_id=<?= $branchId ?>" />
+                <button type="submit" class="btn btn-outline">
+                  <?= $isFav ? '💙 Saved' : '🤍 Save' ?>
+                </button>
+              </form>
+            <?php endif; ?>
+            <a href="https://www.google.com/maps/search/?api=1&query=<?= urlencode($branch['location_name'] . ' ' . $branch['branch_name'] . ' Riyadh') ?>" target="_blank" class="btn btn-primary">🗺 Open in Maps</a>
+          </div>
+        </div>
       </div>
 
       <!-- Congestion info -->
@@ -224,16 +241,18 @@ function badgeText($level) {
             </div>
           </form>
 
-          <?php if ($dtResult): ?>
-            <div class="datetime-result visible">
-              <div class="datetime-answer">
-                <span class="badge <?= badgeClass($dtResult['level']) ?>">
-                  <?= badgeText($dtResult['level']) ?>
-                </span>
-              </div>
-              <div class="datetime-note">Predicted for <?= htmlspecialchars($dtResult['time']) ?></div>
-            </div>
-          <?php endif; ?>
+          <?php if ($dtError): ?>
+  <div class="alert alert-error" style="margin-top: 14px;"><?= htmlspecialchars($dtError) ?></div>
+<?php elseif ($dtResult): ?>
+  <div class="datetime-result visible">
+    <div class="datetime-answer">
+      <span class="badge <?= badgeClass($dtResult['level']) ?>">
+        <?= badgeText($dtResult['level']) ?>
+      </span>
+    </div>
+    <div class="datetime-note">Predicted for <?= htmlspecialchars($dtResult['time']) ?></div>
+  </div>
+<?php endif; ?>
         </div>
 
       </div>

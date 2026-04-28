@@ -2,13 +2,8 @@
 session_start();
 require_once 'db.php';
 
-if (!isset($_SESSION['user_id'])) {
-    header("Location: signin.php");
-    exit;
-}
-
-$userId = $_SESSION['user_id'];
-$userName = $_SESSION['name'];
+$userId   = $_SESSION['user_id'] ?? null;
+$userName = $_SESSION['name'] ?? '';
 
 $q   = trim($_GET['q'] ?? '');
 $cat = $_GET['cat'] ?? 'all';
@@ -76,24 +71,41 @@ unset($loc);
       </a>
       <div class="logo-tagline">Know before you go</div>
 
-      <nav>
-        <a class="nav-link active" href="index.php"><span class="nav-icon">🔍</span> Search</a>
-        <a class="nav-link" href="favorites.php"><span class="nav-icon">⭐</span> Favorites</a>
-        <a class="nav-link" href="profile.php"><span class="nav-icon">👤</span> Profile</a>
-      </nav>
+   <nav>
+  <a class="nav-link active" href="index.php"><span class="nav-icon">🔍</span> Search</a>
+  <?php if ($userId): ?>
+    <a class="nav-link" href="favorites.php"><span class="nav-icon">⭐</span> Favorites</a>
+    <a class="nav-link" href="profile.php"><span class="nav-icon">👤</span> Profile</a>
+  <?php endif; ?>
+</nav>
 
       <div class="sidebar-footer">
-        Signed in as <strong><?= htmlspecialchars($userName) ?></strong><br>
-        Riyadh 🇸🇦
+        <?php if ($userId): ?>
+          Signed in as <strong><?= htmlspecialchars($userName) ?></strong><br>
+          Riyadh 🇸🇦
+        <?php else: ?>
+          <a href="signin.php" class="btn btn-primary btn-sm" style="width: 100%; justify-content: center; margin-bottom: 10px;">Log in</a>
+          Riyadh 🇸🇦
+        <?php endif; ?>
       </div>
     </aside>
 
     <main class="main-content">
 
-      <div class="page-header">
-        <h1>Find a place</h1>
-        <p>Search malls, cafes, and public spots in Riyadh — pick a branch to see how busy it is.</p>
-      </div>
+     <div class="page-header">
+  <h1>Find a place</h1>
+  <p>Search malls, cafes, and public spots in Riyadh — pick a branch to see how busy it is.</p>
+</div>
+
+<?php if (isset($_GET['msg'])): ?>
+  <?php if ($_GET['msg'] === 'invalid_branch'): ?>
+    <div class="alert alert-error">Please pick a branch from the dropdown first.</div>
+  <?php elseif ($_GET['msg'] === 'branch_not_found'): ?>
+    <div class="alert alert-error">That branch doesn't exist anymore.</div>
+  <?php elseif ($_GET['msg'] === 'fav_failed'): ?>
+    <div class="alert alert-error">Couldn't update your favorites. Please try again.</div>
+  <?php endif; ?>
+<?php endif; ?>
 
       <!-- Search box -->
       <form method="GET" action="index.php">

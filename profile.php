@@ -3,7 +3,7 @@ session_start();
 require_once 'db.php';
 
 if (!isset($_SESSION['user_id'])) {
-    header("Location: signin.php");
+    header("Location: signin.php?msg=auth_required");
     exit;
 }
 

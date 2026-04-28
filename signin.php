@@ -2,7 +2,6 @@
 session_start();
 require_once 'db.php';
 
-// If already logged in, send them to index
 if (isset($_SESSION['user_id'])) {
     header("Location: index.php");
     exit;
@@ -10,8 +9,16 @@ if (isset($_SESSION['user_id'])) {
 
 $loginError    = '';
 $registerError = '';
-$activeTab     = 'login'; // which tab to show by default
+$activeTab     = 'login';
 
+// Catch redirect messages from other pages
+if (isset($_GET['msg'])) {
+    if ($_GET['msg'] === 'auth_required') {
+        $loginError = 'You need to log in first to access that page.';
+    } elseif ($_GET['msg'] === 'session_expired') {
+        $loginError = 'Your session expired. Please log in again.';
+    }
+}
 // ─── Handle LOGIN ───
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'login') {
     $email    = trim($_POST['email'] ?? '');
