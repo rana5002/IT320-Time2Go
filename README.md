@@ -10,6 +10,4 @@ at malls, cafes, and public places before they visit.
 - Save favorite branches (registered users)
 - Notifications for saved places (registered users)
 
-## Project Status
-Phase 3 — Frontend prototype with placeholder data.
-Database integration planned for Phase 4.
+
