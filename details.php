@@ -113,15 +113,30 @@ if (isset($_GET['dt']) && $_GET['dt'] !== '') {
         $hour    = (int)date('G', $timestamp);
         $dayOfWk = (int)date('w', $timestamp);
 
+        // Step 1: Get baseline from DB
+        $baseline = $congestion['predicted_level'] ?? 'low';
+        $levels   = ['low' => 1, 'medium' => 2, 'high' => 3];
+        $score    = $levels[$baseline];
+
+        // Step 2: Adjust based on day of week
         if ($dayOfWk === 5 || $dayOfWk === 6) {
-            if ($hour >= 18 && $hour <= 23)      $predicted = 'high';
-            elseif ($hour >= 14 && $hour <= 17)  $predicted = 'medium';
-            else                                  $predicted = 'low';
-        } else {
-            if ($hour >= 19 && $hour <= 22)      $predicted = 'high';
-            elseif ($hour >= 16 && $hour <= 18)  $predicted = 'medium';
-            else                                  $predicted = 'low';
+            $score += 1;  // Weekend = busier
         }
+
+        // Step 3: Adjust based on hour
+        if ($hour >= 18 && $hour <= 22) {
+            $score += 1;  // Peak hours = busier
+        } elseif ($hour >= 0 && $hour <= 8) {
+            $score -= 1;  // Early morning = quieter
+        }
+
+        // Step 4: Clamp score between 1 and 3
+        if ($score < 1) $score = 1;
+        if ($score > 3) $score = 3;
+
+        // Step 5: Convert back to label
+        $reverseMap = [1 => 'low', 2 => 'medium', 3 => 'high'];
+        $predicted  = $reverseMap[$score];
 
         $dtResult = [
             'level' => $predicted,
