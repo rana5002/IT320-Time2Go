@@ -129,6 +129,7 @@ if (isset($_GET['dt']) && $_GET['dt'] !== '') {
         ];
     }
 }
+
 // Helpers
 function badgeClass($level) {
     if ($level === 'low')    return 'badge-low';
@@ -141,6 +142,12 @@ function badgeText($level) {
     if ($level === 'medium') return 'Moderate';
     if ($level === 'high')   return 'Busy';
     return 'No data';
+}
+
+// Format suggestion_time nicely
+$bestTime = null;
+if (!empty($congestion['suggestion_time'])) {
+    $bestTime = date('l · g:i A', strtotime($congestion['suggestion_time']));
 }
 ?>
 <!DOCTYPE html>
@@ -162,13 +169,13 @@ function badgeText($level) {
       </a>
       <div class="logo-tagline">Know before you go</div>
 
-     <nav>
-  <a class="nav-link" href="index.php"><span class="nav-icon">🔍</span> Search</a>
-  <?php if ($userId): ?>
-    <a class="nav-link" href="favorites.php"><span class="nav-icon">⭐</span> Favorites</a>
-    <a class="nav-link" href="profile.php"><span class="nav-icon">👤</span> Profile</a>
-  <?php endif; ?>
-</nav>
+      <nav>
+        <a class="nav-link" href="index.php"><span class="nav-icon">🔍</span> Search</a>
+        <?php if ($userId): ?>
+          <a class="nav-link" href="favorites.php"><span class="nav-icon">⭐</span> Favorites</a>
+          <a class="nav-link" href="profile.php"><span class="nav-icon">👤</span> Profile</a>
+        <?php endif; ?>
+      </nav>
 
       <div class="sidebar-footer">
         <?php if ($userId): ?>
@@ -217,7 +224,7 @@ function badgeText($level) {
       <!-- Congestion info -->
       <div class="stats-grid" style="margin-top: 32px;">
 
-        <div class="stat-card" >
+        <div class="stat-card">
           <div class="stat-label">Right now</div>
           <div class="stat-value">
             <span class="badge <?= badgeClass($congestion['current_level'] ?? null) ?>">
@@ -225,6 +232,18 @@ function badgeText($level) {
             </span>
           </div>
           <div class="stat-note">Current congestion</div>
+        </div>
+
+        <!-- Best time to visit -->
+        <div class="stat-card">
+          <div class="stat-label">Best time to visit</div>
+          <?php if ($bestTime): ?>
+            <div class="stat-value" style="font-size: 18px;">✨ <?= htmlspecialchars($bestTime) ?></div>
+            <div class="stat-note">Suggested visit time</div>
+          <?php else: ?>
+            <div class="stat-value" style="font-size: 18px;">😊 Anytime</div>
+            <div class="stat-note">This place isn't usually busy</div>
+          <?php endif; ?>
         </div>
 
         <!-- Date/time picker -->
@@ -242,17 +261,17 @@ function badgeText($level) {
           </form>
 
           <?php if ($dtError): ?>
-  <div class="alert alert-error" style="margin-top: 14px;"><?= htmlspecialchars($dtError) ?></div>
-<?php elseif ($dtResult): ?>
-  <div class="datetime-result visible">
-    <div class="datetime-answer">
-      <span class="badge <?= badgeClass($dtResult['level']) ?>">
-        <?= badgeText($dtResult['level']) ?>
-      </span>
-    </div>
-    <div class="datetime-note">Predicted for <?= htmlspecialchars($dtResult['time']) ?></div>
-  </div>
-<?php endif; ?>
+            <div class="alert alert-error" style="margin-top: 14px;"><?= htmlspecialchars($dtError) ?></div>
+          <?php elseif ($dtResult): ?>
+            <div class="datetime-result visible">
+              <div class="datetime-answer">
+                <span class="badge <?= badgeClass($dtResult['level']) ?>">
+                  <?= badgeText($dtResult['level']) ?>
+                </span>
+              </div>
+              <div class="datetime-note">Predicted for <?= htmlspecialchars($dtResult['time']) ?></div>
+            </div>
+          <?php endif; ?>
         </div>
 
       </div>
